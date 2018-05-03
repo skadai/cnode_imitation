@@ -10,10 +10,6 @@ from models.mail import MailSQL as Mail
 from fake import test
 
 
-class Test(SQLMixin, SQLBase):
-    __tablename__ = 'Test'
-    username = Column(String(20), nullable=False)
-
 
 def main():
     reset_database()

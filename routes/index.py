@@ -144,8 +144,6 @@ def change_info():
     form = request.form.to_dict()
     u = current_user()
     # u.update(form)
-    for k,v in form.items():
-        form[k] = v.encode('utf-8')
     User.update(u.id, **form)
     return redirect(url_for('.settings'))
 

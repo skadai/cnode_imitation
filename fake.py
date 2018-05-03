@@ -80,10 +80,10 @@ def mails(count=100):
 
 
 def test():
-    # users()
-    # boards()
-    # topics()
-    # replies()
+    users()
+    boards()
+    topics()
+    replies()
     mails()
 
 if __name__ == '__main__':

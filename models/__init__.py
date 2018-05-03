@@ -197,7 +197,7 @@ class Model(object):
 
 
 def configured_engine():
-    url = 'mysql+pymysql://root:{}@localhost/skadai'.format(
+    url = 'mysql+pymysql://root:{}@localhost/skadai?charset=utf8mb4'.format(
         config.mysql_password
     )
     e = create_engine(url, echo=True)
@@ -208,7 +208,7 @@ SQLBase = declarative_base()
 
 
 def reset_database():
-    url = 'mysql+pymysql://root:{}@127.0.0.1:3306/?charset=utf8'.format(
+    url = 'mysql+pymysql://root:{}@127.0.0.1:3306/?charset=utf8mb4'.format(
         config.mysql_password
     )
     print('sql url', url)
@@ -223,6 +223,10 @@ def reset_database():
 
 
 class SQLMixin(object):
+    __table_args__ = {
+        'mysql_engine': 'InnoDB',
+        'mysql_charset': 'utf8mb4'
+    }
     session = scoped_session(sessionmaker(bind=configured_engine()))
     query = session.query_property()
 
@@ -260,7 +264,11 @@ class SQLMixin(object):
         m.updated_time = int(time.time())
 
         SQLMixin.session.add(m)
-        SQLMixin.session.commit()
+        try:
+            SQLMixin.session.commit()
+        except Exception as e:
+            log('数据更新错误',e)
+            SQLMixin.session.rollback()
 
     @classmethod
     def all(cls, **kwargs):
