@@ -3,8 +3,9 @@ from functools import wraps
 
 from flask import session, request, abort, redirect, url_for
 
-from models.user import User
+from models.user import UserSQL as User
 from utils import log
+
 
 def current_user():
     # 从 session 中找到 user_id 字段, 找不到就 -1
@@ -12,11 +13,11 @@ def current_user():
     # 找不到就返回 None
     if 'user_id' in session:
         uid = int(session['user_id'])
-        # e = User.exist(id=uid)
-        e = User.find_by(id=uid)
+        e = User.exist(id=uid)
+        # e = User.find_by(id=uid)
         if e:
-            return e
-            # return User.one(id=uid)
+            # return e
+            return User.one(id=uid)
         else:
             return None
     else:

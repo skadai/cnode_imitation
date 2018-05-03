@@ -8,8 +8,8 @@ from flask import (
 
 from routes import *
 
-from models.topic import Topic
-from models.board import Board
+from models.topic import TopicSQL as Topic
+from models.board import BoardSQL as Board
 
 main = Blueprint('topic', __name__)
 
@@ -18,12 +18,16 @@ main = Blueprint('topic', __name__)
 def index():
     board_id = int(request.args.get('board_id', -1))
     if board_id == -1:
-        ms = Topic.all()
+        ms = Topic.all(deleted=0)
     else:
-        ms = Topic.find_all(board_id=board_id)
+        # ms = Topic.find_all(board_id=board_id)
+        ms = Topic.all(board_id=board_id,deleted=0)
+
     token = new_csrf_token()
     bs = Board.all()
-    return render_template("topic/index.html", ms=ms, token=token, bs=bs, bid=board_id, user=current_user())
+    user = current_user()
+    log('当前的user', user)
+    return render_template("topic/index.html", ms=ms, token=token, bs=bs, bid=board_id, user=user)
 
 
 @main.route('/<int:id>')
@@ -55,7 +59,8 @@ def new():
 @main.route("/add", methods=["POST"])
 @csrf_required
 def add():
-    form = request.form
+    form = request.form.to_dict()
     u = current_user()
-    Topic.new(form, user_id=u.id)
+    form['user_id'] = u.id
+    Topic.new(**form)
     return redirect(url_for('.index'))

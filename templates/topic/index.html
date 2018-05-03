@@ -38,8 +38,7 @@
             <span class="signature">
                 “
 
-                    这家伙很懒，什么个性签名都没有留下。
-
+                    {{ user.signature}}
                 ”
             </span>
           </div>
@@ -72,8 +71,8 @@
                                 <a class="topic_title" href="{{ url_for('topic.detail', id=t.id) }}">
                                     {{ t.title }}
                                 </a>
-                                <span>{{ t.replies() | count }} / {{ t.views }}</span>
-                                {# <span>{{ t.reply_count() }} / {{ t.views }}</span> #}
+                                <span>{{ t.replies() | count }} / {{ t.view }}</span>
+                                {# <span>{{ t.reply_count() }} / {{ t.view }}</span> #}
                                 <a class="topic_title" href="{{ url_for('topic.delete', id=t.id, token=token) }}">
                                 删除
                                 </a>

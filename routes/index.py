@@ -13,8 +13,8 @@ from flask import (
 )
 
 from routes import login_required
-from models.user import User
-from models.topic import Topic
+from models.user import UserSQL as User
+from models.topic import TopicSQL as Topic
 from utils import log
 
 main = Blueprint('index', __name__)
@@ -25,8 +25,10 @@ def current_user():
     # 然后 User.find_by 来用 id 找用户
     # 找不到就返回 None
     uid = session.get('user_id', -1)
-    u = User.find_by(id=uid)
+    # u = User.find_by(id=uid)
+    u = User.one(id=uid)
     return u
+
 
 
 """
@@ -49,7 +51,7 @@ def index():
 @main.route("/register", methods=['POST'])
 def register():
     # form = request.args
-    form = request.form
+    form = request.form.to_dict()
     # 用类函数来判断
     u = User.register(form)
     return redirect(url_for('.index'))
@@ -83,7 +85,8 @@ def profile():
 
 @main.route('/user/<int:id>')
 def user_detail(id):
-    u = User.find(id)
+    # u = User.find_by(id=id)
+    u = User.one(id=id)
     if u is None:
         abort(404)
     else:
@@ -92,11 +95,13 @@ def user_detail(id):
 
 @main.route('/user/<username>')
 def user_profile(username):
-    u = User.find_by(username=username)
+    # u = User.find_by(username=username)
+    u = User.one(username=username)
     if u is None:
         abort(404)
     else:
-        topics = Topic.find_all(user_id=u.id)
+        # topics = Topic.find_all(user_id=u.id)
+        topics = Topic.all(user_id=u.id)
         reply_topic = Topic.user_participated(u)
         return render_template('user.html', user=u,
                                reply_topic=reply_topic,topics=topics)
@@ -115,7 +120,8 @@ def image_add():
 
     u = current_user()
     u.image = '/images/{}'.format(filename)
-    u.save()
+    # u.save()
+    User.update(u.id, image=u.image)
 
     return redirect(url_for('.profile'))
 
@@ -135,9 +141,12 @@ def settings():
 @main.route('/setting/change_info', methods=['POST'])
 @login_required
 def change_info():
-    form = request.form
+    form = request.form.to_dict()
     u = current_user()
-    u.update(form)
+    # u.update(form)
+    for k,v in form.items():
+        form[k] = v.encode('utf-8')
+    User.update(u.id, **form)
     return redirect(url_for('.settings'))
 
 
@@ -148,8 +157,10 @@ def change_password():
     new_pass = request.form['new_pass']
     u = current_user()
     if u.password == u.salted_password(old_pass):
-        u.password = u.salted_password(new_pass)
-        u.save()
+        # u.password = u.salted_password(new_pass)
+        # u.save()
+        password = u.salted_password(new_pass)
+        User.update(u.id, password=password)
         msg = '密码更新成功'
     else:
         msg = '密码更新失败'

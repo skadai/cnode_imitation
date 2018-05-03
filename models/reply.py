@@ -1,6 +1,7 @@
 import time
-from models import Model
-from models.user import User
+from models import Model, SQLMixin, SQLBase
+from models.user import UserSQL as User
+from sqlalchemy import Column, String, Integer
 
 
 class Reply(Model):
@@ -17,3 +18,13 @@ class Reply(Model):
         u = User.find_by(id=self.user_id)
         return u
 
+
+class ReplySQL(SQLBase, SQLMixin):
+    __tablename__ = 'Reply'
+    content = Column(String(200), nullable=False, default='这个用户很懒，啥也没说')
+    topic_id = Column(Integer, nullable=False, default=0)
+    user_id = Column(Integer, nullable=False, default=0)
+
+    def user(self):
+        u = User.one(id=self.user_id)
+        return u

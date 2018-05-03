@@ -8,7 +8,7 @@ from flask import (
 
 from routes import *
 
-from models.mail import Mail
+from models.mail import MailSQL as Mail
 
 main = Blueprint('mail', __name__)
 
@@ -18,7 +18,8 @@ def add():
     form = request.form.to_dict()
     form['receiver_id'] = int(form['receiver_id'])
     u = current_user()
-    m = Mail.new(form, sender_id=u.id)
+    form['sender_id'] = u.id
+    m = Mail.new(**form)
     return redirect(url_for('.index'))
 
 
@@ -26,8 +27,8 @@ def add():
 def index():
     u = current_user()
 
-    sent_mail = Mail.find_all(sender_id=u.id)
-    received_mail = Mail.find_all(receiver_id=u.id)
+    sent_mail = Mail.all(sender_id=u.id)
+    received_mail = Mail.all(receiver_id=u.id)
 
     t = render_template(
         'mail/index.html',
@@ -39,7 +40,8 @@ def index():
 
 @main.route('/view/<int:id>')
 def view(id):
-    mail = Mail.find_by(id=id)
+    # mail = Mail.find_by(id=id)
+    mail = Mail.one(id=id)
     u = current_user()
     # if u.id == mail.receiver_id or u.id == mail.sender_id:
     if u.id in [mail.receiver_id, mail.sender_id]:

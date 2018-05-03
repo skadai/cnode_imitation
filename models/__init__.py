@@ -197,7 +197,7 @@ class Model(object):
 
 
 def configured_engine():
-    url = 'mysql+pymysql://root:{}@localhost/web21'.format(
+    url = 'mysql+pymysql://root:{}@localhost/skadai'.format(
         config.mysql_password
     )
     e = create_engine(url, echo=True)
@@ -208,16 +208,16 @@ SQLBase = declarative_base()
 
 
 def reset_database():
-    url = 'mysql+pymysql://root:{}@127.0.0.1:3306'.format(
+    url = 'mysql+pymysql://root:{}@127.0.0.1:3306/?charset=utf8'.format(
         config.mysql_password
     )
     print('sql url', url)
     e = create_engine(url, echo=True)
 
     with e.connect() as c:
-        c.execute('DROP DATABASE IF EXISTS web21')
-        c.execute('CREATE DATABASE web21')
-        c.execute('USE web21')
+        c.execute('DROP DATABASE IF EXISTS skadai')
+        c.execute('CREATE DATABASE skadai')
+        c.execute('USE skadai')
 
     SQLBase.metadata.create_all(bind=e)
 
@@ -246,6 +246,7 @@ class SQLMixin(object):
 
         SQLMixin.session.add(m)
         SQLMixin.session.commit()
+        return m
 
     @classmethod
     def delete(cls, id):

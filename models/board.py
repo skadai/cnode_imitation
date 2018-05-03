@@ -1,5 +1,6 @@
 import time
-from models import Model
+from models import Model, SQLMixin, SQLBase
+from sqlalchemy import Column, String
 
 
 class Board(Model):
@@ -8,3 +9,10 @@ class Board(Model):
         self.title = form.get('title', '')
         self.ct = int(time.time())
         self.ut = self.ct
+
+
+class BoardSQL(SQLBase, SQLMixin):
+    __tablename__ = 'Board'
+    title = Column(String(50), nullable=False, default='默认')
+
+

@@ -9,6 +9,7 @@ from routes.board import main as board_routes
 from routes.mail import main as mail_routes
 from utils import log
 
+
 def count(input):
     log('count using jinja filter')
     return len(input)
