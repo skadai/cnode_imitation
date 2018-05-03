@@ -17,6 +17,7 @@ main = Blueprint('topic', __name__)
 @main.route("/")
 def index():
     board_id = int(request.args.get('board_id', -1))
+    hots = Topic.hots()
     if board_id == -1:
         ms = Topic.all(deleted=0)
     else:
@@ -26,15 +27,16 @@ def index():
     token = new_csrf_token()
     bs = Board.all()
     user = current_user()
-    log('当前的user', user)
-    return render_template("topic/index.html", ms=ms, token=token, bs=bs, bid=board_id, user=user)
+    return render_template("topic/index.html", ms=ms, token=token,
+                            bs=bs, bid=board_id, user=user, hots=hots)
 
 
 @main.route('/<int:id>')
 def detail(id):
     m = Topic.get(id)
     # 传递 topic 的所有 reply 到 页面中
-    return render_template("topic/detail.html", topic=m)
+    return render_template("topic/detail.html", topic=m,
+                           user=current_user(),hots=Topic.hots())
 
 
 @main.route("/delete")
@@ -53,7 +55,8 @@ def new():
     bs = Board.all()
     # return render_template("topic/new.html", bs=bs, bid=board_id)
     token = new_csrf_token()
-    return render_template("topic/new.html", bs=bs, token=token, bid=board_id)
+    return render_template("topic/new.html", bs=bs, token=token, bid=board_id,
+                           hots=Topic.hots(), user=current_user())
 
 
 @main.route("/add", methods=["POST"])

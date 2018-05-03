@@ -52,7 +52,6 @@
           </div>
             {% endif %}
 
-
             <div class="panel">
                 <div class="inner">
                     <a href="{{ url_for('topic.new') }}" class="create_topic_btn">
@@ -60,9 +59,54 @@
                     </a>
                 </div>
             </div>
+            <div class="panel">
+                <div class="header">
+                  <span class="col_fade">最热话题</span>
+                </div>
+                <div class="inner">
+
+                  <ul class="unstyled">
+                    {% for t in hots %}
+                    <li>
+                        <div>
+                        <a class="dark topic_title" href="{{ url_for('topic.detail', id=t.id) }}" title="{{ t.title}}">{{ t.title}}</a>
+                    </div>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            <div class="panel">
+                <div class="header">
+                  <span class="col_fade">友情社区</span>
+                </div>
+                <div class="inner">
+                  <ol class="friendship-community">
+                    <div class="sep10"></div>
+                    <li>
+                      <a href="http://golangtc.com/" target="_blank">
+                        <img src="http://o4j806krb.qnssl.com/public/images/golangtc-logo.png">
+                      </a>
+                    </li>
+                    <div class="sep10"></div>
+                    <li>
+                      <a href="http://118.126.94.217:5000" target="_blank">
+                        <img src="/images/manji.png">
+                      </a>
+                    </li>
+                    <div class="sep10"></div>
+                  </ol>
+                </div>
+              </div>
         </div>
         <div id="content">
             <div class="panel">
+                <div class="header">
+                    <a class="topic-tab {% if bid == -1 %}current-tab {%endif%}" href="/topic">全部</a>
+                    {% for b in bs%}
+                    <a class="topic-tab {% if b.id==bid%}current-tab {%endif%}" href="/topic?board_id={{b.id}}">{{b.title}}</a>
+                    {% endfor%}
+                </div>
                 <div class="inner post">
                     <div class="topic_list">
                         {% for t in ms %}
@@ -73,9 +117,11 @@
                                 </a>
                                 <span>{{ t.replies() | count }} / {{ t.view }}</span>
                                 {# <span>{{ t.reply_count() }} / {{ t.view }}</span> #}
+                                {% if user and user.id == t.user_id %}
                                 <a class="topic_title" href="{{ url_for('topic.delete', id=t.id, token=token) }}">
                                 删除
                                 </a>
+                                {% endif %}
                             </div>
                         </div>
                         {% endfor %}

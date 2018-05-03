@@ -3,6 +3,7 @@ from sqlalchemy import Column, String, Integer
 
 from models.reply import ReplySQL as Reply
 from models.user import UserSQL as User
+from models.board import BoardSQL as Board
 from models import Model, SQLMixin, SQLBase
 
 
@@ -78,6 +79,10 @@ class TopicSQL(SQLBase, SQLMixin):
         u = User.one(id=self.user_id)
         return u
 
+    def board(self):
+        b = Board.one(id=self.board_id)
+        return b
+
     def replies(self):
         ms = Reply.all(topic_id=self.id)
         return ms
@@ -101,3 +106,7 @@ class TopicSQL(SQLBase, SQLMixin):
                 topic.updated_time = users[user.id]
                 topics.append(topic)
         return topics
+
+    @classmethod
+    def hots(cls):
+        return cls.query.order_by(cls.view.desc()).limit(5).all()
