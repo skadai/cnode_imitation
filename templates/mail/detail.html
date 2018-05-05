@@ -105,7 +105,11 @@
         <div class="header">
           <span class="col_fade">发件人: {{ mail.sender() }} </span>
           <span class="col_fade">收件人: {{ mail.receiver() }} </span>
-          <span class="col_fade">主题: {{ mail.title }} </span>
+          <span class="col_fade">
+              主题: {% if user.username == mail.sender() %}
+              {{ mail|message_out }} {% else %} {{ mail | message_in }}
+              {% endif %}
+          </span>
         </div>
         <div class="inner">
           <div class="user_card">

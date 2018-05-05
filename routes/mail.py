@@ -48,10 +48,11 @@ def index():
 @login_required
 def view(id):
     # mail = Mail.find_by(id=id)
+
     mail = Mail.one(id=id)
+    log('找到的mail是',mail)
     u = current_user()
-    # if u.id == mail.receiver_id or u.id == mail.sender_id:
     if u.id in [mail.receiver_id, mail.sender_id]:
-        return render_template('mail/detail.html', mail=mail)
+        return render_template('mail/detail.html', mail=mail, user=current_user())
     else:
         return redirect(url_for('.index'))

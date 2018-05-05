@@ -57,7 +57,7 @@ def login_required(route_function):
     """
 
     @wraps(route_function)
-    def f():
+    def f(*args, **kwargs):
         log('login_required')
         u = current_user()
         if u is None:
@@ -65,6 +65,6 @@ def login_required(route_function):
             return redirect(url_for('index.index'))
         else:
             log('登录用户', route_function)
-            return route_function()
+            return route_function(*args, **kwargs)
 
     return f

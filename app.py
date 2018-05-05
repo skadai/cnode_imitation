@@ -24,6 +24,20 @@ def sort_fromnow(topics):
     return topics
 
 
+def message_in(mail):
+    if '@' in mail.title:
+        return '你被{} @了'.format(mail.sender())
+    else:
+        return mail.title
+
+
+def message_out(mail):
+    if '@' in mail.title:
+        return '你@了 {}'.format(mail.receiver())
+    else:
+        return mail.title
+
+
 def configured_app():
     # web framework
     # web application
@@ -37,6 +51,8 @@ def configured_app():
     app.add_template_filter(count)
     app.add_template_filter(fromnow)
     app.add_template_filter(sort_fromnow)
+    app.add_template_filter(message_out)
+    app.add_template_filter(message_in)
 
     return app
 
