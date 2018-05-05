@@ -9,6 +9,7 @@ from flask import (
 from routes import *
 
 from models.mail import MailSQL as Mail
+from models.topic import TopicSQL as Topic
 
 main = Blueprint('mail', __name__)
 
@@ -34,6 +35,8 @@ def index():
         'mail/index.html',
         send=sent_mail,
         received=received_mail,
+        hots=Topic.hots(),
+        user=current_user()
     )
     return t
 

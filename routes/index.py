@@ -104,7 +104,8 @@ def user_profile(username):
         topics = Topic.all(user_id=u.id)
         reply_topic = Topic.user_participated(u)
         return render_template('user.html', user=u,
-                               reply_topic=reply_topic,topics=topics)
+                               reply_topic=reply_topic,topics=topics,
+                               hots=Topic.hots(),u=current_user())
 
 
 @main.route('/image/add', methods=['POST'])

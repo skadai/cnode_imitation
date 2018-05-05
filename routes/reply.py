@@ -5,7 +5,6 @@ from flask import (
     Blueprint,
 )
 from models.reply import ReplySQL as Reply
-
 from routes import current_user
 
 
@@ -19,5 +18,9 @@ def add():
     print('DEBUG', form)
     form['user_id'] = u.id
     m = Reply.new(**form)
+    m.add_mail()
+
     return redirect(url_for('topic.detail', id=m.topic_id))
+
+
 

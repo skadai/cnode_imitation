@@ -1,6 +1,7 @@
 import time
 from models import Model, SQLMixin, SQLBase
 from models.user import UserSQL as User
+from models.mail import MailSQL as Mail
 from sqlalchemy import Column, String, Integer
 
 
@@ -28,3 +29,20 @@ class ReplySQL(SQLBase, SQLMixin):
     def user(self):
         u = User.one(id=self.user_id)
         return u
+
+    def add_mail(self):
+        receivers = []
+        for tag in self.content.split(' '):
+            if tag.startswith('@'):
+                receivers.append(tag[1:])
+
+        for r in receivers:
+            if User.exist(username=r):
+                receiver = User.one(username=r)
+                form = dict(
+                    title='你被{} @ 了'.format(self.user().username),
+                    content='点击<a href="/topic/{}">链接</a>查看'.format(self.topic_id),
+                    sender_id=self.user_id,
+                    receiver_id=receiver.id
+                )
+                Mail.new(**form)
