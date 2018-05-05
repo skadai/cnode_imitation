@@ -10,11 +10,13 @@ from routes import *
 
 from models.mail import MailSQL as Mail
 from models.topic import TopicSQL as Topic
+from routes import login_required
 
 main = Blueprint('mail', __name__)
 
 
 @main.route("/add", methods=["POST"])
+@login_required
 def add():
     form = request.form.to_dict()
     form['receiver_id'] = int(form['receiver_id'])
@@ -25,6 +27,7 @@ def add():
 
 
 @main.route('/')
+@login_required
 def index():
     u = current_user()
 
@@ -42,6 +45,7 @@ def index():
 
 
 @main.route('/view/<int:id>')
+@login_required
 def view(id):
     # mail = Mail.find_by(id=id)
     mail = Mail.one(id=id)

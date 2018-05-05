@@ -109,6 +109,7 @@ def user_profile(username):
 
 
 @main.route('/image/add', methods=['POST'])
+@login_required
 def image_add():
     file = request.files['avatar']
 

@@ -40,6 +40,7 @@ def detail(id):
 
 
 @main.route("/delete")
+@login_required
 @csrf_required
 def delete():
     id = int(request.args.get('id'))
@@ -60,6 +61,7 @@ def new():
 
 
 @main.route("/add", methods=["POST"])
+@login_required
 @csrf_required
 def add():
     form = request.form.to_dict()

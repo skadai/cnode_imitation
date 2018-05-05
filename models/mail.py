@@ -3,6 +3,7 @@ from models import Model, SQLMixin, SQLBase
 from sqlalchemy import Column, String, Integer
 from models.user import UserSQL as User
 
+
 class Mail(Model):
     def __init__(self, form):
         self.id = None

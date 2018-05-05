@@ -5,13 +5,17 @@ from flask import (
     Blueprint,
 )
 from models.reply import ReplySQL as Reply
-from routes import current_user
+from routes import (
+    current_user,
+    login_required
+)
 
 
 main = Blueprint('reply', __name__)
 
 
 @main.route("/add", methods=["POST"])
+@login_required
 def add():
     form = request.form.to_dict()
     u = current_user()
