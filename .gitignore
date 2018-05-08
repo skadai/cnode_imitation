@@ -95,8 +95,8 @@ Temporary Items
 .apdisk
 
 # deploy_stuff
-.nginx
-.conf
+*.conf
+*.nginx
 
 
 # Windows
@@ -120,3 +120,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+

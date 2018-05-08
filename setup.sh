@@ -1,4 +1,11 @@
-#!/usr/bin/env bash
+# clone 代码到 /var/www/web23
+
+# 换源
+ln -f -s /var/www/web23/misc/sources.list /etc/apt/sources.list
+mkdir -p /root/.pip
+ln -f -s /var/www/web23/misc/pip.conf /root/.pip/pip.conf
+apt-get update
+
 # 系统设置
 apt install -y  zsh curl ufw
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -11,7 +18,7 @@ ufw status verbose
 ufw -f enable
 
 # 装依赖
-apt install -y git supervisor nginx mysql-server
+apt install -y git supervisor nginx
 add-apt-repository -y ppa:deadsnakes/ppa
 apt update
 apt install -y python3.6
@@ -29,10 +36,6 @@ ln -s -f /var/www/web23/web23.conf /etc/supervisor/conf.d/web23.conf
 # 不要再 sites-available 里面放任何东西
 ln -s -f /var/www/web23/web23.nginx /etc/nginx/sites-enabled/web23
 
-
-
-# 重启服务器
-# service supervisor restart
-# service nginx restart
-
-echo 'deploy success'
+echo 'succsss'
+echo 'ip'
+hostname -I

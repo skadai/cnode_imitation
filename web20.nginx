@@ -1,8 +1,0 @@
-server {
-    listen 8000;
-
-
-    location / {
-        proxy_pass http://localhost:4200;
-    }
-}
