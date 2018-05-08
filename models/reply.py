@@ -44,7 +44,7 @@ class ReplySQL(SQLBase, SQLMixin):
                 receiver = User.one(username=r)
                 form = dict(
                     title='你被{} @ 了'.format(self.user().username),
-                    content='{} 点击<a href="/topic/{}">链接</a>查看'.format(content, self.topic_id),
+                    content='<a href="/topic/{}">{} </a>查看'.format(content, self.topic_id),
                     sender_id=self.user_id,
                     receiver_id=receiver.id
                 )

@@ -51,6 +51,10 @@ coverage.xml
 *.mo
 *.pot
 
+# deploy stuff
+*.conf
+*.nginx
+
 # Django stuff:
 *.log
 
