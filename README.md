@@ -11,3 +11,9 @@ http://118.126.94.217:8000/topic/52
 
 ## demo展示
 ![Cnode](https://github.com/skadai/markdownphoto/blob/ad9ec324e3b0991278cf58d1a2d4202d0303f963/%E6%8A%80%E6%9C%AF%E8%B5%84%E6%96%99/Cnode.gif?raw=true)
+
+
+## todolist
+1. 实时聊天websocket
+2. 安全方面优化（上传文件限制）
+ 

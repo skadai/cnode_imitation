@@ -34,9 +34,13 @@ def index():
 @main.route('/<int:id>')
 def detail(id):
     m = Topic.get(id)
-    # 传递 topic 的所有 reply 到 页面中
-    return render_template("topic/detail.html", topic=m,
-                           user=current_user(),hots=Topic.hots())
+    # 当存在时返回页面，不存在返回主页
+    if m:
+        # 传递 topic 的所有 reply 到 页面中
+        return render_template("topic/detail.html", topic=m,
+                          user=current_user(),hots=Topic.hots())
+    else:
+        return redirect(url_for('.index'))
 
 
 @main.route("/delete")
